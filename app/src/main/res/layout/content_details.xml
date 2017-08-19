@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ciastek.todoapp.DetailsActivity"
+    tools:showIn="@layout/activity_details">
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/taskSummaryTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/task_summary">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/taskDescriptionTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/task_description_height"
+        android:hint="@string/task_description">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/task_description_height"
+            />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/taskState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"/>
+
+    <Spinner
+        android:id="@+id/taskPriority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"/>
+</LinearLayout>

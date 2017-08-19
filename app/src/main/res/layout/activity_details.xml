@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ciastek.todoapp.MainActivity">
+    tools:context="com.ciastek.todoapp.DetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,16 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin_top"
-        android:src="@drawable/ic_add_white_24dp"
-        />
+    <include layout="@layout/content_details"/>
 
 </android.support.design.widget.CoordinatorLayout>
