@@ -1,7 +1,10 @@
 package com.ciastek.todoapp;
 
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.ciastek.todoapp.database.DatabaseDescription;
 import com.ciastek.todoapp.utils.TaskUtils;
 
 public class NewTaskActivity extends AppCompatActivity {
@@ -50,10 +54,18 @@ public class NewTaskActivity extends AppCompatActivity {
         } else if (TaskUtils.isSummaryCorrect(newSummary)){
             String taskDescription = taskDescriptionLayout.getEditText().getText().toString();
             TaskPriority priority = (TaskPriority) taskPriority.getSelectedItem();
-            Task newTask = new Task(newSummary, taskDescription, priority);
 
-            ToDoApplication.getApplication().getTasks().add(newTask);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DatabaseDescription.Task.COLUMN_SUMMARY, newSummary);
+            contentValues.put(DatabaseDescription.Task.COLUMN_DESCRIPTION, taskDescription);
+            contentValues.put(DatabaseDescription.Task.COLUMN_PRIORITY, priority.getValue());
+            contentValues.put(DatabaseDescription.Task.COLUMN_STATE, 0);
+
+            Uri newContactUri = getContentResolver().insert(
+                        DatabaseDescription.Task.CONTENT_URI, contentValues);
+
             finish();
+
         } else {
             displayWarningDialog(R.string.summary_empty_message);
         }

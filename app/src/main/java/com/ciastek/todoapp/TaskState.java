@@ -11,6 +11,7 @@ public enum TaskState {
 
 
     private String stateName;
+    private int value;
 
     TaskState(String stateName){
         this.stateName = stateName;
@@ -18,5 +19,18 @@ public enum TaskState {
 
     @Override public String toString(){
         return stateName;
+    }
+
+    public int getValue(){
+        switch (stateName){
+            case "New":
+                return 0;
+            case "In progress":
+                return 1;
+            case "Done":
+                return 2;
+            default:
+                return 0;
+        }
     }
 }

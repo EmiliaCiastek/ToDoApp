@@ -10,13 +10,27 @@ public enum TaskPriority {
     CRITICAL("Critical");
 
 
-    private String prorityName;
+    private String priorityName;
+    private int value;
 
-    TaskPriority(String prorityName){
-        this.prorityName = prorityName;
+    TaskPriority(String priorityName){
+        this.priorityName = priorityName;
     }
 
     @Override public String toString(){
-        return prorityName;
+        return priorityName;
+    }
+
+    public int getValue(){
+        switch (priorityName){
+            case "Minor":
+                return 0;
+            case "Major":
+                return 1;
+            case "Critical":
+                return 2;
+            default:
+                return 0;
+        }
     }
 }

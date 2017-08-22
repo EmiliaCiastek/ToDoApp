@@ -1,11 +1,14 @@
 package com.ciastek.todoapp;
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import com.ciastek.todoapp.database.DatabaseDescription;
 
 import java.util.List;
 
@@ -14,40 +17,57 @@ import java.util.List;
  */
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
-    private final List<Task> tasks;
-    private final View.OnClickListener clickListener;
-
-    public TasksAdapter (List<Task> tasks, View.OnClickListener clickListener){
-        this.tasks = tasks;
-        this.clickListener = clickListener;
-    }
+    private View.OnClickListener clickListener;
+    private Cursor cursor = null;
 
     @Override
     public ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.list_item, parent, false);
 
-        return (new ViewHolder(view, clickListener));
+        return (new ViewHolder(view));
     }
 
     @Override
     public void onBindViewHolder (ViewHolder holder, int position) {
-        holder.taskTextView.setText(tasks.get(position).getSummary());
+        cursor.moveToPosition(position);
+        long rowID  = cursor.getLong(cursor.getColumnIndex(DatabaseDescription.Task._ID));
+        holder.setRowID(rowID);
+        holder.getClickListener().setTaskUri(DatabaseDescription.Task.buildTaskUri(rowID));
+        holder.taskTextView.setText(cursor.getString(cursor.getColumnIndex(
+                DatabaseDescription.Task.COLUMN_SUMMARY)));
+    }
+
+    public void swapCursor(Cursor cursor){
+        this.cursor = cursor;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount () {
-        return tasks.size();
+        return (cursor != null) ? cursor.getCount() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView taskTextView;
+        private long rowID;
+        private View itemView;
+        private TaskClickListener clickListener;
 
-        public ViewHolder (View itemView, View.OnClickListener clickListener) {
+        public ViewHolder (View itemView) {
             super(itemView);
             taskTextView = (TextView) itemView.findViewById(R.id.taskTextView);
 
+            clickListener = new TaskClickListener(itemView.getContext(), DatabaseDescription.Task.buildTaskUri(rowID));
             itemView.setOnClickListener(clickListener);
+        }
+
+        public void setRowID(long rowID) {
+            this.rowID = rowID;
+        }
+
+        public TaskClickListener getClickListener () {
+            return clickListener;
         }
     }
 }

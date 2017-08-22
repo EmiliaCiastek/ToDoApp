@@ -1,9 +1,16 @@
 package com.ciastek.todoapp;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +19,13 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.ciastek.todoapp.database.DatabaseDescription;
 import com.ciastek.todoapp.utils.TaskUtils;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int TASKS_LOADER = 0;
+    private static final String TASK_URI = "task_uri";
 
     private Task currentTask;
     private int taskId;
@@ -22,6 +33,9 @@ public class DetailsActivity extends AppCompatActivity {
     private TextInputLayout descriptionTextLayout;
     private Spinner prioritySpinner;
     private Spinner stateSpinner;
+    private Uri taskUri;
+    private ArrayAdapter<TaskPriority> prioritySpinnerAdapter;
+    ArrayAdapter<TaskState> stateSpinnerAdapter;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -29,31 +43,26 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        taskUri = getIntent().getExtras().getParcelable(TASK_URI);
+
 
         prioritySpinner = (Spinner) findViewById(R.id.taskDetailsPriority);
-        ArrayAdapter<TaskPriority> prioritySpinnerAdapter = new ArrayAdapter<TaskPriority>(this, android.R.layout.simple_spinner_item, TaskPriority.values());
+        prioritySpinnerAdapter = new ArrayAdapter<TaskPriority>(this, android.R.layout.simple_spinner_item, TaskPriority.values());
         prioritySpinner.setAdapter(prioritySpinnerAdapter);
 
         stateSpinner = (Spinner) findViewById(R.id.taskDetailsState);
-        ArrayAdapter<TaskState> stateSpinnerAdapter = new ArrayAdapter<TaskState>(this, android.R.layout.simple_spinner_item, TaskState.values());
+        stateSpinnerAdapter = new ArrayAdapter<TaskState>(this, android.R.layout.simple_spinner_item, TaskState.values());
         stateSpinner.setAdapter(stateSpinnerAdapter);
 
-        taskId = getIntent().getExtras().getInt("ITEM_ID");
-        currentTask = ToDoApplication.getApplication().getTasks().get(taskId);
-
         summaryTextLayout = (TextInputLayout) findViewById(R.id.taskSummaryTextLayout);
-        summaryTextLayout.getEditText().setText(currentTask.getSummary());
-
         descriptionTextLayout = (TextInputLayout) findViewById(R.id.taskDescriptionTextLayout);
-        descriptionTextLayout.getEditText().setText(currentTask.getDescription());
 
-        int prioritySpinnerPosition = prioritySpinnerAdapter.getPosition(currentTask.getPriority());
-        prioritySpinner.setSelection(prioritySpinnerPosition);
 
-        int stateSpinnerPosition = stateSpinnerAdapter.getPosition(currentTask.getState());
-        stateSpinner.setSelection(stateSpinnerPosition);
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportLoaderManager().initLoader(TASKS_LOADER, null, this);
+
     }
 
     @Override
@@ -87,7 +96,7 @@ public class DetailsActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.button_delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick (DialogInterface dialogInterface, int i) {
-                ToDoApplication.getApplication().getTasks().remove(taskId);
+                getContentResolver().delete(taskUri, null, null);
                 finish();
             }
         });
@@ -101,12 +110,20 @@ public class DetailsActivity extends AppCompatActivity {
         if(TaskUtils.summaryExist(newSummary, ToDoApplication.getApplication().getTasks())){
             displayWarningDialog(R.string.summary_exist_message);
         } else if (TaskUtils.isSummaryCorrect(newSummary)){
-            currentTask.setSummary(newSummary);
-            currentTask.setDescription(descriptionTextLayout.getEditText().getText().toString());
-            currentTask.setPriority((TaskPriority) prioritySpinner.getSelectedItem());
-            currentTask.setState((TaskState) stateSpinner.getSelectedItem());
+            String newDescription = descriptionTextLayout.getEditText().getText().toString();
+            TaskPriority newPriority = (TaskPriority) prioritySpinner.getSelectedItem();
+            TaskState newState = (TaskState) stateSpinner.getSelectedItem();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DatabaseDescription.Task.COLUMN_SUMMARY, newSummary);
+            contentValues.put(DatabaseDescription.Task.COLUMN_DESCRIPTION, newDescription);
+            contentValues.put(DatabaseDescription.Task.COLUMN_PRIORITY, newPriority.getValue());
+            contentValues.put(DatabaseDescription.Task.COLUMN_STATE, newState.getValue());
+
+            int updatedRows = getContentResolver().update(taskUri, contentValues, null, null);
 
             finish();
+
         } else {
             displayWarningDialog(R.string.summary_empty_message);
         }
@@ -119,5 +136,55 @@ public class DetailsActivity extends AppCompatActivity {
                 .setNeutralButton(R.string.ok_button, null)
                 .create()
                 .show();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader (int id, Bundle args) {
+        // na podstawie argumentu określającego identyfikator utwórz właściwy obiekt CursorLoader;
+        //  w tym fragmencie znajduje się tylko jeden obiekt Loader, a więc instrukcja switch jest zbędna
+        CursorLoader cursorLoader;
+
+        switch (id) {
+            case TASKS_LOADER:
+                cursorLoader = new CursorLoader(this,
+                        taskUri, // adres Uri kontaktu, który ma zostać wyświetlony
+                        null, // rzutowanie wartości null zwraca wszystkie kolumny
+                        null, // wybranie wartości null zwraca wszystkie rzędy
+                        null, // brak argumentów selekcji
+                        null); // kolejność sortowania
+                break;
+            default:
+                cursorLoader = null;
+                break;
+        }
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished (Loader<Cursor> loader, Cursor data) {
+
+        if (data != null && data.moveToFirst()) {
+
+            int summaryIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_SUMMARY);
+            int descriptionIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_DESCRIPTION);
+            int priorityIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_PRIORITY);
+            int stateIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_STATE);
+
+            summaryTextLayout.getEditText().setText(data.getString(summaryIndex));
+
+            descriptionTextLayout.getEditText().setText(data.getString(descriptionIndex));
+
+            int prioritySpinnerPosition = prioritySpinnerAdapter.getPosition(TaskPriority.values()[data.getInt(priorityIndex)]);
+            prioritySpinner.setSelection(prioritySpinnerPosition);
+
+            int stateSpinnerPosition = stateSpinnerAdapter.getPosition(TaskState.values()[data.getInt(stateIndex)]);
+            stateSpinner.setSelection(stateSpinnerPosition);
+        }
+    }
+
+    @Override
+    public void onLoaderReset (Loader<Cursor> loader) {
+
     }
 }

@@ -1,23 +1,30 @@
 package com.ciastek.todoapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+
+
+import com.ciastek.todoapp.database.DatabaseDescription;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String TASK_URI = "task_uri";
+    private static final int TASKS_LOADER = 0;
 
     private List<Task> tasks;
-    private TasksAdapter adapter;
+    private TasksAdapter tasksAdapter;
     private FloatingActionButton addFloatingButton;
     private RecyclerView tasksView;
 
@@ -28,16 +35,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //tasks = new ArrayList<>();
-
         tasks = ToDoApplication.getApplication().getTasks();
-        //tasks.add(new Task("1 task"));
 
         tasksView = (RecyclerView) findViewById(R.id.tasksRecyclerView);
         tasksView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new TasksAdapter(tasks, itemClickListener);
-        tasksView.setAdapter(adapter);
+        tasksAdapter = new TasksAdapter();
+        tasksView.setAdapter(tasksAdapter);
 
         addFloatingButton = (FloatingActionButton) findViewById(R.id.addTaskButton);
         addFloatingButton.setOnClickListener(new View.OnClickListener() {
@@ -47,44 +51,41 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(newTaskIntent);
             }
         });
+
+        getSupportLoaderManager().initLoader(TASKS_LOADER, null, this);
     }
 
     @Override
     protected void onResume () {
         super.onResume();
 
-        adapter.notifyDataSetChanged();
+        tasksAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public boolean onCreateOptionsMenu (Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public Loader<Cursor> onCreateLoader (int id, Bundle args) {
+        switch (id) {
+            case TASKS_LOADER:
+                return new CursorLoader(this,
+                        DatabaseDescription.Task.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null); // TODO (1): add sorting and filtering
+            default:
+                return null;
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onLoadFinished (Loader<Cursor> loader, Cursor data) {
+        tasksAdapter.swapCursor(data);
     }
 
-    private final View.OnClickListener itemClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick (View view) {
-            Intent detailsIntent = new Intent(MainActivity.this, DetailsActivity.class);
-            int itemPosition = tasksView.getChildLayoutPosition(view);
-            detailsIntent.putExtra("ITEM_ID", itemPosition);
-            startActivity(detailsIntent);
-        }
-    };
+    @Override
+    public void onLoaderReset (Loader<Cursor> loader) {
+        tasksAdapter.swapCursor(null);
+    }
+
+
 }
