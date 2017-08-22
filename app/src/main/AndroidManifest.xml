@@ -38,6 +38,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ciastek.todoapp.MainActivity"/>
         </activity>
+
+        <provider
+            android:name=".database.TasksContentProvider"
+            android:authorities="com.ciastek.todoapp.database"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>

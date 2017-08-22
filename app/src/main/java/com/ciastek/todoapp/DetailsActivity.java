@@ -1,5 +1,6 @@
 package com.ciastek.todoapp;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -10,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import com.ciastek.todoapp.utils.TaskUtils;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -27,11 +30,11 @@ public class DetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        prioritySpinner = (Spinner) findViewById(R.id.taskPriority);
+        prioritySpinner = (Spinner) findViewById(R.id.taskDetailsPriority);
         ArrayAdapter<TaskPriority> prioritySpinnerAdapter = new ArrayAdapter<TaskPriority>(this, android.R.layout.simple_spinner_item, TaskPriority.values());
         prioritySpinner.setAdapter(prioritySpinnerAdapter);
 
-        stateSpinner = (Spinner) findViewById(R.id.taskState);
+        stateSpinner = (Spinner) findViewById(R.id.taskDetailsState);
         ArrayAdapter<TaskState> stateSpinnerAdapter = new ArrayAdapter<TaskState>(this, android.R.layout.simple_spinner_item, TaskState.values());
         stateSpinner.setAdapter(stateSpinnerAdapter);
 
@@ -93,11 +96,28 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void saveTask(){
-        currentTask.setSummary(summaryTextLayout.getEditText().getText().toString());
-        currentTask.setDescription(descriptionTextLayout.getEditText().getText().toString());
-        currentTask.setPriority((TaskPriority) prioritySpinner.getSelectedItem());
-        currentTask.setState((TaskState) stateSpinner.getSelectedItem());
+        String newSummary = summaryTextLayout.getEditText().getText().toString();
 
-        finish();
+        if(TaskUtils.summaryExist(newSummary, ToDoApplication.getApplication().getTasks())){
+            displayWarningDialog(R.string.summary_exist_message);
+        } else if (TaskUtils.isSummaryCorrect(newSummary)){
+            currentTask.setSummary(newSummary);
+            currentTask.setDescription(descriptionTextLayout.getEditText().getText().toString());
+            currentTask.setPriority((TaskPriority) prioritySpinner.getSelectedItem());
+            currentTask.setState((TaskState) stateSpinner.getSelectedItem());
+
+            finish();
+        } else {
+            displayWarningDialog(R.string.summary_empty_message);
+        }
+    }
+
+    private void displayWarningDialog(int messageId){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.summary_info_title)
+                .setMessage(messageId)
+                .setNeutralButton(R.string.ok_button, null)
+                .create()
+                .show();
     }
 }

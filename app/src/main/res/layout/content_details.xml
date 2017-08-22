@@ -19,9 +19,9 @@
         android:hint="@string/task_summary">
 
         <EditText
+            android:id="@+id/taskDetailsSummary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -32,22 +32,22 @@
         android:hint="@string/task_description">
 
         <EditText
+            android:id="@+id/taskDetailsDescription"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/task_description_height"
-            />
+            android:layout_height="@dimen/task_description_height"/>
 
 
     </android.support.design.widget.TextInputLayout>
 
     <Spinner
-        android:id="@+id/taskState"
+        android:id="@+id/taskDetailsState"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_margin"
         android:layout_marginTop="@dimen/activity_margin"/>
 
     <Spinner
-        android:id="@+id/taskPriority"
+        android:id="@+id/taskDetailsPriority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_margin"

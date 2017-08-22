@@ -10,6 +10,7 @@ public class Task {
     private String description;
     private TaskPriority priority;
     private TaskState state;
+    private int taskId;
 
     public Task (String summary, String description, TaskPriority priority){
         this.summary = summary;
