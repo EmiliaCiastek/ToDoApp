@@ -17,4 +17,22 @@
     <string name="summary_exist_message">Task summary has to be unique</string>
     <string name="ok_button">Ok</string>
     <string name="invalid_query_uri">Query error</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="task_filtering_label">Task filtering</string>
+    <string name="show_all_tasks">Show all</string>
+    <string name="show_open_tasks">Show open tasks</string>
+    <string name="show_closed_tasks">Show closed tasks</string>
+    <string name="show_today_tasks">Show today tasks</string>
+
+    <string name="task_sorting_label">Task sorting</string>
+    <string name="sort_by_priority">Sort by priority</string>
+    <string name="sort_by_date">Sort by due date</string>
+
+
+
+
 </resources>
