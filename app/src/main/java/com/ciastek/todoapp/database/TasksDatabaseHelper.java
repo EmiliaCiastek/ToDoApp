@@ -24,7 +24,9 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
                 DatabaseDescription.Task.COLUMN_SUMMARY + " TEXT, " +
                 DatabaseDescription.Task.COLUMN_DESCRIPTION + " TEXT, " +
                 DatabaseDescription.Task.COLUMN_PRIORITY + " INTEGER, " +
-                DatabaseDescription.Task.COLUMN_STATE + " INTEGER);";
+                DatabaseDescription.Task.COLUMN_STATE + " INTEGER," +
+                DatabaseDescription.Task.COLUMN_DUE_DATE + " DATE);";
+
 
         sqLiteDatabase.execSQL(CREATE_TASKS_TABLE);
     }

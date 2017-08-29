@@ -23,6 +23,8 @@ public class DatabaseDescription {
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_PRIORITY = "priority";
         public static final String COLUMN_STATE = "state";
+        public static final String COLUMN_DUE_DATE = "due_date";
+
 
         public static Uri buildTaskUri (long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

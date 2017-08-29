@@ -52,4 +52,17 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_margin"
         android:layout_marginTop="@dimen/activity_margin"/>
+
+    <TextView
+        android:id="@+id/dueDateLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/task_due_date"/>
+
+    <TextView
+        android:id="@+id/taskskDetailsDueDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:style="?attr/editTextStyle"/>
 </LinearLayout>

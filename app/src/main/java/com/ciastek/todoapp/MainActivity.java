@@ -23,6 +23,8 @@ import android.view.View;
 
 import com.ciastek.todoapp.database.DatabaseDescription;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TasksAdapter tasksAdapter;
     private FloatingActionButton addFloatingButton;
     private RecyclerView tasksView;
+    private String selection = null;
+    private String sortOrder = DatabaseDescription.Task.COLUMN_PRIORITY + " DESC, " + DatabaseDescription.Task.COLUMN_SUMMARY;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -85,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return new CursorLoader(this,
                         DatabaseDescription.Task.CONTENT_URI,
                         null,
+                        selection,
                         null,
-                        null,
-                        null); // TODO (1): add sorting and filtering
+                        sortOrder);
             default:
                 return null;
         }
@@ -109,24 +113,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int id = item.getItemId();
 
         if (id == R.id.show_all) {
-            // Handle the camera action
+            selection = null;
         } else if (id == R.id.show_done) {
-
+            selection = DatabaseDescription.Task.COLUMN_STATE + " = " + TaskState.DONE.getValue();
         } else if (id == R.id.show_open) {
-            Log.d("MainActivity", "show open");
-
+            selection = DatabaseDescription.Task.COLUMN_STATE + " != " + TaskState.DONE.getValue();
         } else if (id == R.id.show_today) {
+            Calendar todayCal = Calendar.getInstance();
+            Log.d("MainActivity", "date calendar: " + todayCal);
+            String dateFormat = "yyyy-MM-dd";
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+            String todayDate = sdf.format(todayCal.getTime());
+            Log.d("MainActivity", "date formatted: " + todayDate);
+
+            //selection = DatabaseDescription.Task.COLUMN_DUE_DATE + " = " + todayDate;
+            selection = DatabaseDescription.Task.COLUMN_DUE_DATE + " = '" + todayDate + "'";
+            Log.d("MainActivity", "selection: " + selection);
 
         } else if (id == R.id.sort_date) {
-            Log.d("MainActivity", "sort by date");
-
-
+            sortOrder =DatabaseDescription.Task.COLUMN_DUE_DATE + ", " + DatabaseDescription.Task.COLUMN_SUMMARY;
         } else if (id == R.id.sort_priority) {
-
+            sortOrder = DatabaseDescription.Task.COLUMN_PRIORITY + " DESC, " + DatabaseDescription.Task.COLUMN_SUMMARY;
         }
 
+        getSupportLoaderManager().restartLoader(TASKS_LOADER, null, this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //drawer.closeDrawer(GravityCompat.START);
+        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

@@ -37,7 +37,7 @@
             android:id="@+id/newTaskEditDescription"
             android:layout_width="match_parent"
             android:layout_height="@dimen/task_description_height"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionNext"
             android:inputType="none|textMultiLine"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -47,5 +47,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_margin"
         android:layout_marginTop="@dimen/activity_margin"/>
+
+    <TextView
+        android:id="@+id/dueDateLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/task_due_date"/>
+
+    <TextView
+        android:id="@+id/newTaskDueDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:style="?attr/editTextStyle"/>
 
 </LinearLayout>

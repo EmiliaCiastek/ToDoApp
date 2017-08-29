@@ -1,5 +1,6 @@
 package com.ciastek.todoapp;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -14,13 +15,20 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.ciastek.todoapp.database.DatabaseDescription;
 import com.ciastek.todoapp.utils.TaskUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -33,9 +41,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private TextInputLayout descriptionTextLayout;
     private Spinner prioritySpinner;
     private Spinner stateSpinner;
+    private TextView taskDueDate;
     private Uri taskUri;
     private ArrayAdapter<TaskPriority> prioritySpinnerAdapter;
     ArrayAdapter<TaskState> stateSpinnerAdapter;
+    private Calendar calendar = Calendar.getInstance();
+
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -47,22 +58,20 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 
         prioritySpinner = (Spinner) findViewById(R.id.taskDetailsPriority);
-        prioritySpinnerAdapter = new ArrayAdapter<TaskPriority>(this, android.R.layout.simple_spinner_item, TaskPriority.values());
+        prioritySpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, TaskPriority.values());
         prioritySpinner.setAdapter(prioritySpinnerAdapter);
 
         stateSpinner = (Spinner) findViewById(R.id.taskDetailsState);
-        stateSpinnerAdapter = new ArrayAdapter<TaskState>(this, android.R.layout.simple_spinner_item, TaskState.values());
+        stateSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, TaskState.values());
         stateSpinner.setAdapter(stateSpinnerAdapter);
 
         summaryTextLayout = (TextInputLayout) findViewById(R.id.taskSummaryTextLayout);
         descriptionTextLayout = (TextInputLayout) findViewById(R.id.taskDescriptionTextLayout);
-
-
-
+        taskDueDate = (TextView) findViewById(R.id.taskskDetailsDueDate);
+        taskDueDate.setOnClickListener(dateClickListener);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportLoaderManager().initLoader(TASKS_LOADER, null, this);
-
     }
 
     @Override
@@ -113,12 +122,15 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             String newDescription = descriptionTextLayout.getEditText().getText().toString();
             TaskPriority newPriority = (TaskPriority) prioritySpinner.getSelectedItem();
             TaskState newState = (TaskState) stateSpinner.getSelectedItem();
+            String newDate = taskDueDate.getText().toString();
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(DatabaseDescription.Task.COLUMN_SUMMARY, newSummary);
             contentValues.put(DatabaseDescription.Task.COLUMN_DESCRIPTION, newDescription);
             contentValues.put(DatabaseDescription.Task.COLUMN_PRIORITY, newPriority.getValue());
             contentValues.put(DatabaseDescription.Task.COLUMN_STATE, newState.getValue());
+            contentValues.put(DatabaseDescription.Task.COLUMN_DUE_DATE, newDate);
+
 
             int updatedRows = getContentResolver().update(taskUri, contentValues, null, null);
 
@@ -170,10 +182,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             int descriptionIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_DESCRIPTION);
             int priorityIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_PRIORITY);
             int stateIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_STATE);
+            int dateIndex = data.getColumnIndex(DatabaseDescription.Task.COLUMN_DUE_DATE);
+
 
             summaryTextLayout.getEditText().setText(data.getString(summaryIndex));
-
             descriptionTextLayout.getEditText().setText(data.getString(descriptionIndex));
+            taskDueDate.setText(data.getString(dateIndex));
 
             int prioritySpinnerPosition = prioritySpinnerAdapter.getPosition(TaskPriority.values()[data.getInt(priorityIndex)]);
             prioritySpinner.setSelection(prioritySpinnerPosition);
@@ -186,5 +200,39 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoaderReset (Loader<Cursor> loader) {
 
+    }
+
+    private View.OnClickListener dateClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            new DatePickerDialog(DetailsActivity.this, date, calendar
+                    .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, monthOfYear);
+            Log.d("DetailsActivity", "month: " + monthOfYear);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        }
+
+    };
+
+    private void updateLabel() {
+        //Log.d("DetailsActivity", "month: " + monthOfYear);
+
+        //calendar.toString();
+        String dateFormat = "yyyy-MM-dd"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+
+        taskDueDate.setText(sdf.format(calendar.getTime()));
     }
 }

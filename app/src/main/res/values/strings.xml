@@ -4,6 +4,7 @@
     <string name="tasks">Your tasks</string>
     <string name="title_activity_new_task">NewTaskActivity</string>
     <string name="task_summary">Task summary</string>
+    <string name="task_due_date">Task due date</string>
     <string name="task_description">Task description</string>
     <string name="title_activity_details">DetailsActivity</string>
     <string name="menu_delete">Delete task</string>
