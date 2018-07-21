@@ -1,16 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.ciastek.todoapp"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,12 +33,14 @@ dependencies {
 
     //testCompile "org.hamcrest:hamcrest-all:1.3"
 
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:support-v4:25.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:support-annotations:25.4.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:support-v4:27.1.1'
+    compile 'com.android.support.constraint:constraint-layout:1.1.2'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:support-annotations:27.1.1'
     testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.0'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 }
