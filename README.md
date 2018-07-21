@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/EmiliaCiastek/ToDoApp.svg?branch=master)](https://travis-ci.org/EmiliaCiastek/ToDoApp)
