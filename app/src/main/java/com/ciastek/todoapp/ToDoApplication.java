@@ -2,6 +2,8 @@ package com.ciastek.todoapp;
 
 import android.app.Application;
 
+import com.ciastek.todoapp.model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 

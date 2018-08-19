@@ -124,5 +124,4 @@ public class NewTaskActivity extends AppCompatActivity {
 
         newTaskDueDate.setText(sdf.format(calendar.getTime()));
     }
-
 }

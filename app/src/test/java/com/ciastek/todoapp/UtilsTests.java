@@ -1,5 +1,8 @@
 package com.ciastek.todoapp;
 
+import com.ciastek.todoapp.model.PRIORITY;
+import com.ciastek.todoapp.model.STATE;
+import com.ciastek.todoapp.model.Task;
 import com.ciastek.todoapp.utils.TaskUtils;
 
 import org.junit.Test;
@@ -28,7 +31,7 @@ public class UtilsTests {
     @Test
     public void shouldReturnTrueIfTaskSummaryAlreadyExist () {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("New Task", "Description", TaskPriority.MINOR));
+        tasks.add(new Task("New Task", "Description", PRIORITY.MINOR, 0L, STATE.NEW));
 
         String newTaskSummary = "New Task";
 
@@ -38,7 +41,7 @@ public class UtilsTests {
     @Test
     public void shouldReturnFalseIfTaskSummaryNotExist () {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("New Task", "Description", TaskPriority.MINOR));
+        tasks.add(new Task("New Task", "Description", PRIORITY.MINOR, 0L, STATE.NEW));
 
         String newTaskSummary = "Task summary";
 

@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ciastek.todoapp.database.DatabaseDescription;
+import com.ciastek.todoapp.model.Task;
 import com.ciastek.todoapp.utils.TaskUtils;
 
 import java.text.SimpleDateFormat;
@@ -150,8 +151,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader (int id, Bundle args) {
-        // na podstawie argumentu określającego identyfikator utwórz właściwy obiekt CursorLoader;
-        //  w tym fragmencie znajduje się tylko jeden obiekt Loader, a więc instrukcja switch jest zbędna
         CursorLoader cursorLoader;
 
         switch (id) {

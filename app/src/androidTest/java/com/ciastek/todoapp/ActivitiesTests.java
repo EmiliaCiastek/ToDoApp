@@ -31,7 +31,7 @@ public class ActivitiesTests {
     private final TaskState NEW_TASK_STATE = TaskState.NEW;
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActicityRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void shouldStartNewTaskActivityAfterButtonClicked () {

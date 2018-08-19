@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ciastek.todoapp.database.DatabaseDescription;
+import com.ciastek.todoapp.model.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
