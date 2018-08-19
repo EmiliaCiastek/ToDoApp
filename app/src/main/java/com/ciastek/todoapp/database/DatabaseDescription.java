@@ -4,10 +4,6 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Created by emcia on 22.08.2017.
- */
-
 public class DatabaseDescription {
 
     public static final String AUTHORITY = "com.ciastek.todoapp.database";
@@ -26,7 +22,7 @@ public class DatabaseDescription {
         public static final String COLUMN_DUE_DATE = "due_date";
 
 
-        public static Uri buildTaskUri (long id){
+        public static Uri buildTaskUri (long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }

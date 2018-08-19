@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-
 import com.ciastek.todoapp.database.DatabaseDescription;
 
 import java.text.SimpleDateFormat;
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.d("MainActivity", "selection: " + selection);
 
         } else if (id == R.id.sort_date) {
-            sortOrder =DatabaseDescription.Task.COLUMN_DUE_DATE + ", " + DatabaseDescription.Task.COLUMN_SUMMARY;
+            sortOrder = DatabaseDescription.Task.COLUMN_DUE_DATE + ", " + DatabaseDescription.Task.COLUMN_SUMMARY;
         } else if (id == R.id.sort_priority) {
             sortOrder = DatabaseDescription.Task.COLUMN_PRIORITY + " DESC, " + DatabaseDescription.Task.COLUMN_SUMMARY;
         }

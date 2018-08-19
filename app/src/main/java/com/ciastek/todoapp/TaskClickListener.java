@@ -5,13 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
-/**
- * Created by emcia on 22.08.2017.
- */
-
 public class TaskClickListener implements View.OnClickListener {
     private static final String TASK_URI = "task_uri";
-
 
     private Uri taskUri;
     private Context context;
@@ -27,7 +22,6 @@ public class TaskClickListener implements View.OnClickListener {
         detailsIntent.putExtra(TASK_URI, taskUri);
         context.startActivity(detailsIntent);
     }
-
 
     public Uri getTaskUri () {
         return taskUri;

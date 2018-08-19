@@ -5,16 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ciastek.todoapp.database.DatabaseDescription;
-
-import java.util.List;
-
-/**
- * Created by emcia on 19.08.2017.
- */
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
     private View.OnClickListener clickListener;
@@ -31,14 +24,14 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder (ViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        long rowID  = cursor.getLong(cursor.getColumnIndex(DatabaseDescription.Task._ID));
+        long rowID = cursor.getLong(cursor.getColumnIndex(DatabaseDescription.Task._ID));
         holder.setRowID(rowID);
         holder.getClickListener().setTaskUri(DatabaseDescription.Task.buildTaskUri(rowID));
         holder.taskTextView.setText(cursor.getString(cursor.getColumnIndex(
                 DatabaseDescription.Task.COLUMN_SUMMARY)));
     }
 
-    public void swapCursor(Cursor cursor){
+    public void swapCursor (Cursor cursor) {
         this.cursor = cursor;
         notifyDataSetChanged();
     }
@@ -62,7 +55,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
             itemView.setOnClickListener(clickListener);
         }
 
-        public void setRowID(long rowID) {
+        public void setRowID (long rowID) {
             this.rowID = rowID;
         }
 

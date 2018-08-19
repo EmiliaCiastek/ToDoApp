@@ -5,10 +5,6 @@ import android.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by emcia on 19.08.2017.
- */
-
 public class ToDoApplication extends Application {
 
     private static ToDoApplication application;

@@ -5,16 +5,13 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -61,12 +58,12 @@ public class NewTaskActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void saveTask(){
+    private void saveTask () {
         String newSummary = taskSummaryLayout.getEditText().getText().toString();
 
-        if(TaskUtils.summaryExist(newSummary, ToDoApplication.getApplication().getTasks())){
+        if (TaskUtils.summaryExist(newSummary, ToDoApplication.getApplication().getTasks())) {
             displayWarningDialog(R.string.summary_exist_message);
-        } else if (TaskUtils.isSummaryCorrect(newSummary)){
+        } else if (TaskUtils.isSummaryCorrect(newSummary)) {
             String taskDescription = taskDescriptionLayout.getEditText().getText().toString();
             String taskDueDate = newTaskDueDate.getText().toString();
             TaskPriority priority = (TaskPriority) taskPriority.getSelectedItem();
@@ -80,7 +77,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
 
             Uri newContactUri = getContentResolver().insert(
-                        DatabaseDescription.Task.CONTENT_URI, contentValues);
+                    DatabaseDescription.Task.CONTENT_URI, contentValues);
 
             finish();
 
@@ -89,7 +86,7 @@ public class NewTaskActivity extends AppCompatActivity {
         }
     }
 
-    private void displayWarningDialog(int messageId){
+    private void displayWarningDialog (int messageId) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.summary_info_title)
                 .setMessage(messageId)
@@ -101,7 +98,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private View.OnClickListener dateClickListener = new View.OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick (View v) {
             new DatePickerDialog(NewTaskActivity.this, date, calendar
                     .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -111,8 +108,8 @@ public class NewTaskActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
+        public void onDateSet (DatePicker view, int year, int monthOfYear,
+                               int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -121,7 +118,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
     };
 
-    private void updateLabel() {
+    private void updateLabel () {
         String dateFormat = "yyyy-MM-dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 

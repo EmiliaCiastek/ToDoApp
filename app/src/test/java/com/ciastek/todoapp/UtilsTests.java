@@ -7,31 +7,26 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
 public class UtilsTests {
 
     @Test
-    public void shouldReturnFalseIfSummaryIsEmpty (){
+    public void shouldReturnFalseIfSummaryIsEmpty () {
         String summary = "";
 
         assertEquals(false, TaskUtils.isSummaryCorrect(summary));
     }
 
     @Test
-    public void shouldReturnTrueIfSummaryIsNotEmpty(){
+    public void shouldReturnTrueIfSummaryIsNotEmpty () {
         String summary = "Task summary";
 
         assertEquals(true, TaskUtils.isSummaryCorrect(summary));
     }
 
     @Test
-    public void shouldReturnTrueIfTaskSummaryAlreadyExist(){
+    public void shouldReturnTrueIfTaskSummaryAlreadyExist () {
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("New Task", "Description", TaskPriority.MINOR));
 
@@ -41,7 +36,7 @@ public class UtilsTests {
     }
 
     @Test
-    public void shouldReturnFalseIfTaskSummaryNotExist(){
+    public void shouldReturnFalseIfTaskSummaryNotExist () {
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("New Task", "Description", TaskPriority.MINOR));
 

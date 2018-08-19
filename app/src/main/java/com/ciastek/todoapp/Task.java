@@ -1,9 +1,5 @@
 package com.ciastek.todoapp;
 
-/**
- * Created by emcia on 19.08.2017.
- */
-
 public class Task {
 
     private String summary;
@@ -12,7 +8,7 @@ public class Task {
     private TaskState state;
     private int taskId;
 
-    public Task (String summary, String description, TaskPriority priority){
+    public Task (String summary, String description, TaskPriority priority) {
         this.summary = summary;
         this.description = description;
         this.state = TaskState.NEW;

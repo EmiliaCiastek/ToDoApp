@@ -1,13 +1,11 @@
 package com.ciastek.todoapp;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -84,7 +82,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     public boolean onOptionsItemSelected (MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.delete_task:
                 deleteTask(taskId);
                 return true;
@@ -96,7 +94,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         }
     }
 
-    private void deleteTask(final int taskId){
+    private void deleteTask (final int taskId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(R.string.confirm_delete_tittle);
@@ -113,12 +111,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         builder.create().show();
     }
 
-    private void saveTask(){
+    private void saveTask () {
         String newSummary = summaryTextLayout.getEditText().getText().toString();
 
-        if(TaskUtils.summaryExist(newSummary, ToDoApplication.getApplication().getTasks())){
+        if (TaskUtils.summaryExist(newSummary, ToDoApplication.getApplication().getTasks())) {
             displayWarningDialog(R.string.summary_exist_message);
-        } else if (TaskUtils.isSummaryCorrect(newSummary)){
+        } else if (TaskUtils.isSummaryCorrect(newSummary)) {
             String newDescription = descriptionTextLayout.getEditText().getText().toString();
             TaskPriority newPriority = (TaskPriority) prioritySpinner.getSelectedItem();
             TaskState newState = (TaskState) stateSpinner.getSelectedItem();
@@ -141,7 +139,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         }
     }
 
-    private void displayWarningDialog(int messageId){
+    private void displayWarningDialog (int messageId) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.summary_info_title)
                 .setMessage(messageId)
@@ -205,7 +203,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private View.OnClickListener dateClickListener = new View.OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick (View v) {
             new DatePickerDialog(DetailsActivity.this, date, calendar
                     .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -215,8 +213,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
+        public void onDateSet (DatePicker view, int year, int monthOfYear,
+                               int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
             Log.d("DetailsActivity", "month: " + monthOfYear);
@@ -226,7 +224,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     };
 
-    private void updateLabel() {
+    private void updateLabel () {
         //Log.d("DetailsActivity", "month: " + monthOfYear);
 
         //calendar.toString();

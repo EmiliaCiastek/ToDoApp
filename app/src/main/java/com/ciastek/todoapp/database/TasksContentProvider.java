@@ -32,7 +32,7 @@ public class TasksContentProvider extends ContentProvider {
         numberOfRowsDeleted = dbHelper.getWritableDatabase().delete(
                 DatabaseDescription.Task.TABLE_NAME, DatabaseDescription.Task._ID + "=" + id, selectionArgs);
 
-        if (numberOfRowsDeleted != 0){
+        if (numberOfRowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
@@ -51,7 +51,7 @@ public class TasksContentProvider extends ContentProvider {
         long rowId = dbHelper.getWritableDatabase().insert(
                 DatabaseDescription.Task.TABLE_NAME, null, values);
 
-        if(rowId > 0) {
+        if (rowId > 0) {
             newContactUri = DatabaseDescription.Task.buildTaskUri(rowId);
 
             getContext().getContentResolver().notifyChange(uri, null);
@@ -75,7 +75,7 @@ public class TasksContentProvider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DatabaseDescription.Task.TABLE_NAME);
 
-        switch (uriMatcher.match(uri)){
+        switch (uriMatcher.match(uri)) {
             case ONE_TASK:
                 queryBuilder.appendWhere(DatabaseDescription.Task._ID + "=" + uri.getLastPathSegment());
                 break;
@@ -102,7 +102,7 @@ public class TasksContentProvider extends ContentProvider {
         numberOfRowsUpdated = dbHelper.getWritableDatabase().update(
                 DatabaseDescription.Task.TABLE_NAME, values, DatabaseDescription.Task._ID + "=" + id, selectionArgs);
 
-        if(numberOfRowsUpdated != 0) {
+        if (numberOfRowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
